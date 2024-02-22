@@ -1,10 +1,10 @@
+import CreateCollectionBtn from "@/components/CreateCollectionBtn";
 import SadFace from "@/components/icons/SadFace";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { prisma } from "@/lib/prisma";
 import { wait } from "@/lib/wait";
-import { UserButton, currentUser } from "@clerk/nextjs";
-import Image from "next/image";
+import {  currentUser } from "@clerk/nextjs";
 import { Suspense } from "react";
 
 export default async function Home() {
@@ -59,11 +59,14 @@ async function CollectionList() {
   })
   if(collections.length === 0) {
     return(
-    <Alert>
-      <SadFace/>
-      <AlertTitle>There are no collections yet</AlertTitle>
-      <AlertDescription>Creata a collection to get started</AlertDescription>
-    </Alert>
+    <div className="flex flex-col gap-5 mt-4">
+      <Alert>
+        <SadFace/>
+        <AlertTitle>There are no collections yet</AlertTitle>
+        <AlertDescription>Creata a collection to get started</AlertDescription>
+      </Alert>
+      <CreateCollectionBtn></CreateCollectionBtn>
+    </div>
     )
   }
 }
