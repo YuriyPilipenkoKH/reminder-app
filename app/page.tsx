@@ -1,8 +1,44 @@
-import { UserButton } from "@clerk/nextjs";
+import { Skeleton } from "@/components/ui/skeleton";
+import { wait } from "@/lib/wait";
+import { UserButton, currentUser } from "@clerk/nextjs";
 import Image from "next/image";
+import { Suspense } from "react";
 
-export default function Home() {
+export default async function Home() {
   return (
-   <div>Hello</div>
+      <Suspense fallback={<WelcomeMsgFallback/>}>
+        <WelcomeMsg/>
+      </Suspense>
+    
+  )
+}
+
+async function WelcomeMsg() {
+  const user = await currentUser()
+  await wait(3000)
+
+  if(!user) {
+    return <div>error</div>
+  }
+  
+  return (
+    <div className="flex w-full">
+      <h1 className="text-4xl font-bold">
+      Welcome , <br />
+      {user.firstName} {user.lastName}
+      </h1>
+    </div>
   );
+
+}
+
+function WelcomeMsgFallback() {
+  return (
+    <div className="flex w-full">
+    <h1 className="text-4xl font-bold">
+      <Skeleton className="w-[150px] h-[36px]" />
+      <Skeleton className="w-[150px] h-[36px]" />
+    </h1>
+  </div>
+  )
 }
