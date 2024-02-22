@@ -30,7 +30,7 @@ async function WelcomeMsg() {
   
   return (
     <div className="flex w-full mb-12 ">
-      <h1 className="text-4xl font-bold">
+      <h1 className="text-4xl font-bold mx-auto">
       Welcome , <br />
       {user.firstName} {user.lastName}
       </h1>
