@@ -9,6 +9,7 @@ import { CollectionColor, CollectionColors } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { Separator } from "./ui/separator"
 import { Button } from "./ui/button"
+import { createCollection } from "@/actions/collection"
 
 interface Props {
     open: boolean
@@ -20,12 +21,22 @@ function CreateCollectionSheet({open, onOpenChange } :Props ) {
         defaultValues: {},
         resolver: zodResolver(createCollectionSchema),
     })
-    const onSubmit =(data: createCollectionSchemaType) => {
+    const onSubmit = async(data: createCollectionSchemaType) => {
         console.log('SUB',data)
+        try {
+            await createCollection(data)
+        } 
+        catch (error: any) {
+            alert("ERROR")
+        }
+    }
+    const openChangeWrapper =(open:boolean) => {
+        form.reset()
+        onOpenChange(open)
     }
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet open={open} onOpenChange={openChangeWrapper}>
         <SheetContent>
             <SheetHeader>
                 <SheetTitle>Add new collection</SheetTitle>
