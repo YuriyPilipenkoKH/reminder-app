@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils"
 import { Separator } from "./ui/separator"
 import { Button } from "./ui/button"
 import { createCollection } from "@/actions/collection"
+import { toast } from "./ui/use-toast"
+import { ReloadIcon } from "@radix-ui/react-icons"
 
 interface Props {
     open: boolean
@@ -25,9 +27,22 @@ function CreateCollectionSheet({open, onOpenChange } :Props ) {
         console.log('SUB',data)
         try {
             await createCollection(data)
+
+            //close the sheet
+            openChangeWrapper(false)
+
+            toast({
+                title: 'Success',
+                description: 'Collection created successfully',
+                
+               })
         } 
         catch (error: any) {
-            alert("ERROR")
+           toast({
+            title: 'Error',
+            description: 'Something went wrong',
+            variant: 'destructive'
+           })
         }
     }
     const openChangeWrapper =(open:boolean) => {
@@ -111,13 +126,19 @@ function CreateCollectionSheet({open, onOpenChange } :Props ) {
                 <Separator/>
                 <Button
                 type="submit"
+                disabled={form.formState.isSubmitting}
                 variant={'outline'}
                 className={cn(
                    form.watch('color') && 
                    CollectionColors[form.getValues('color') as CollectionColor]
                 )}
                 onClick={form.handleSubmit(onSubmit)}
-                >Confirm</Button>
+                >
+                    Confirm
+                {form.formState.isSubmitting && (
+                    <ReloadIcon className="ml-2 h-4 w-4 animate-spin"/>
+                )}    
+                    </Button>
             </div>
         </SheetContent>
     </Sheet>

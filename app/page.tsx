@@ -57,6 +57,7 @@ async function CollectionList() {
       userId: user?.id
     }
   })
+
   if(collections.length === 0) {
     return(
     <div className="flex flex-col gap-5 mt-4">
@@ -65,8 +66,14 @@ async function CollectionList() {
         <AlertTitle>There are no collections yet</AlertTitle>
         <AlertDescription>Creata a collection to get started</AlertDescription>
       </Alert>
-      <CreateCollectionBtn></CreateCollectionBtn>
+      <CreateCollectionBtn/>
     </div>
     )
   }
+
+  return (
+    <div>Collections: {collections.length}
+      <CreateCollectionBtn/>
+    </div>
+  )
 }
