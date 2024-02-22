@@ -12,6 +12,7 @@ import { Button } from "./ui/button"
 import { createCollection } from "@/actions/collection"
 import { toast } from "./ui/use-toast"
 import { ReloadIcon } from "@radix-ui/react-icons"
+import { useRouter } from "next/navigation"
 
 interface Props {
     open: boolean
@@ -23,6 +24,9 @@ function CreateCollectionSheet({open, onOpenChange } :Props ) {
         defaultValues: {},
         resolver: zodResolver(createCollectionSchema),
     })
+
+const router = useRouter()
+
     const onSubmit = async(data: createCollectionSchemaType) => {
         console.log('SUB',data)
         try {
@@ -30,6 +34,7 @@ function CreateCollectionSheet({open, onOpenChange } :Props ) {
 
             //close the sheet
             openChangeWrapper(false)
+            router.refresh()
 
             toast({
                 title: 'Success',

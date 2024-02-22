@@ -11,8 +11,8 @@ export async function createCollection(form : createCollectionSchemaType) {
     if(!user) {
       throw new Error('User not found')  
     }
-    await wait(3000)
-    
+    // await wait(3000)
+
     return await prisma.collection.create({
         data: {
             userId: user.id,
