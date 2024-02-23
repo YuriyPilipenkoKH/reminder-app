@@ -14,6 +14,9 @@ import { Calendar } from "./ui/calendar"
 import { Button } from "./ui/button"
 import { CalendarIcon, ReloadIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
+import { createTask } from "@/actions/task"
+import { toast } from "./ui/use-toast"
+import { useRouter } from "next/navigation"
 
  interface Props {
     open: boolean
@@ -22,6 +25,7 @@ import { format } from "date-fns"
  }
 
 function CreateTaskDialog({open, collection, setOpen}: Props) {
+    const router = useRouter()
     const form = useForm<createTaskSchemaType>({
         resolver: zodResolver(createTaskSchema),
         defaultValues: {
@@ -31,9 +35,25 @@ function CreateTaskDialog({open, collection, setOpen}: Props) {
     })
     const onOpenChangeWrapper =(value: boolean) => {
         setOpen(value)
+        form.reset()
     }
     const onSubmit = async (data: createTaskSchemaType) => {
-        console.log('submit', data)
+        try {
+            await  createTask(data)
+            toast({
+                title: 'Success',
+                description: 'Task created successfully',
+               })
+            onOpenChangeWrapper(false) 
+            router.refresh()  
+        }
+         catch (error) {
+            toast({
+                title: 'Error',
+                description: 'Cannot create task',
+                variant: 'destructive'
+               })
+        }
     }
 
   return (
@@ -81,13 +101,13 @@ function CreateTaskDialog({open, collection, setOpen}: Props) {
                     />
                     <FormField 
                     control = {form.control}
-                    name={'content'}
+                    name={'expiresAt'}
                     render={({field}) => (
                         <FormItem>
                             <FormLabel>
                                 expires at
                             </FormLabel>
-                            <FormDescription>
+                            <FormDescription onClick={() => console.log(field.value)}>
                               When should this task expire?  
                             </FormDescription>
                             <FormControl>
@@ -100,6 +120,7 @@ function CreateTaskDialog({open, collection, setOpen}: Props) {
                                         variant={'outline'}>
                                           <CalendarIcon className="mr-2 h-4 w-4"/> 
                                           {field.value && format(field.value, 'PPP')}
+                                          {/* {field.value } */}
                                           {!field.value && <span> No expiration</span>}
                                         </Button>
                                     </PopoverTrigger>
@@ -124,6 +145,7 @@ function CreateTaskDialog({open, collection, setOpen}: Props) {
         <DialogFooter>
             <Button
             disabled ={form.formState.isSubmitting}
+            onClick={form.handleSubmit(onSubmit)}
             className={cn(
                 'w-full dark:text-white text-white',
                 CollectionColors[collection.color as CollectionColor] )}
