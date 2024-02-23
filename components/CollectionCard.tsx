@@ -11,6 +11,9 @@ import { Progress } from "./ui/progress"
 import { Separator } from "./ui/separator"
 import PlusIcon from "./icons/PlusIcon"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog"
+import { deleteCollection } from "@/actions/collection"
+import { toast } from "./ui/use-toast"
+import { useRouter } from "next/navigation"
 
 interface Props {
     collection: Collection
@@ -19,6 +22,25 @@ interface Props {
 function CollectionCard({collection} :Props) {
     const [isOpen, setIsOpen] = useState(false)
     const tasks: string[] = ['t1','t2', 't3'];
+    const router = useRouter()
+
+    const removeCollection = async() => {
+        try {
+            await deleteCollection(collection.id)
+            toast({
+                title: 'Success',
+                description: 'Collection deleted'
+            })
+            router.refresh()
+            }
+            catch (error) {
+                toast({
+                    title: 'Error',
+                    description: 'Can not delete collection',
+                    variant: 'destructive'
+                })
+        }
+    }
 
   return (
     <Collapsible 
@@ -77,7 +99,9 @@ function CollectionCard({collection} :Props) {
                         </AlertDialogDescription>
                     <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Proceed</AlertDialogAction>
+                        <AlertDialogAction
+                        onClick={() => removeCollection() }
+                        >Proceed</AlertDialogAction>
                     </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
