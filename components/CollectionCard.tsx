@@ -78,7 +78,19 @@ function CollectionCard({collection} :Props) {
         <CollapsibleContent 
             className="flex rounded-b-md flex-col dark:bg-neutral-900 shadow-lg">
             {tasks.length === 0 
-            ?  <div>No tasks yet</div>
+            ?  (
+                <Button 
+                variant={'ghost'} 
+                className="flex items-center justify-center gap-1 p-8 py-12 rounded-none"
+                onClick={() => setShowCreateModal(true)}>
+                    <p>There no tasks yet:</p>
+                    <span className={cn(
+                        'text-sm bg-clip-text text-transparent ',
+                        CollectionColors[collection.color as CollectionColor]
+                    )}>
+                        Create one</span>
+                </Button>
+               )
             : (
                 <>
                 <Progress className="rounded-none" value={44}/>
