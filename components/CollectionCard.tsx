@@ -1,8 +1,8 @@
 "use client"
 
-import { Collection } from "@prisma/client"
+import {  Collection, Task} from "@prisma/client"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { Button } from "./ui/button"
 import { cn } from "@/lib/utils"
 import { CollectionColor, CollectionColors } from "@/lib/constants"
@@ -15,13 +15,18 @@ import { deleteCollection } from "@/actions/collection"
 import { toast } from "./ui/use-toast"
 import { useRouter } from "next/navigation"
 
+// console.log(Collection , Task)
+
 interface Props {
-    collection: Collection
+    collection: Collection & {
+        tasks: Task[]
+    }
 }
 
 function CollectionCard({collection} :Props) {
     const [isOpen, setIsOpen] = useState(false)
-    const tasks: string[] = ['t1','t2', 't3'];
+    const [isLoading, startTransition] = useTransition()
+    const {tasks} = collection 
     const router = useRouter()
 
     const removeCollection = async() => {
@@ -71,7 +76,9 @@ function CollectionCard({collection} :Props) {
                 <Progress className="rounded-none" value={44}/>
                 <div className="p-4 gap-3 flex flex-col">
                 { tasks.map((task, index) => (
-                    <div key={index}>Mocked</div>
+                    <div key={task.id}>
+                      { task.content }  
+                    </div>
                 )) }
                 </div>
                 </>
@@ -79,6 +86,8 @@ function CollectionCard({collection} :Props) {
             <Separator/>     
             <footer className="h-[40px] px-4 p-[2px] text-xs to-neutral-500 flex justify-between items-center">
              <p>Created at{ collection.createdAt.toDateString() }</p>
+             {isLoading && <div>Deleting....</div>}
+             {!isLoading && (
              <div>
                 <Button size={'icon'} variant={'ghost'}>
                     <PlusIcon />
@@ -100,12 +109,13 @@ function CollectionCard({collection} :Props) {
                     <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                        onClick={() => removeCollection() }
+                        onClick={() => startTransition(removeCollection) }
                         >Proceed</AlertDialogAction>
                     </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
              </div>
+             )}
             </footer>
         </CollapsibleContent>
     </Collapsible>
