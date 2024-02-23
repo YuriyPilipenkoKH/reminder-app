@@ -10,7 +10,7 @@ import { CaretDownIcon, CaretUpIcon, TrashIcon } from "@radix-ui/react-icons"
 import { Progress } from "./ui/progress"
 import { Separator } from "./ui/separator"
 import PlusIcon from "./icons/PlusIcon"
-import { AlertDialog, AlertDialogTrigger } from "./ui/alert-dialog"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog"
 
 interface Props {
     collection: Collection
@@ -62,11 +62,24 @@ function CollectionCard({collection} :Props) {
                     <PlusIcon />
                 </Button>
                 <AlertDialog>
-                    <AlertDialogTrigger>
+                    <AlertDialogTrigger asChild>
                     <Button size={'icon'} variant={'ghost'}>
                         <TrashIcon />
                     </Button>
                     </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogTitle>
+                             Are You sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action can not be undone.<br/>
+                            This will permanently delete your collection and all tasks inside it
+                        </AlertDialogDescription>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction>Proceed</AlertDialogAction>
+                    </AlertDialogFooter>
+                    </AlertDialogContent>
                 </AlertDialog>
              </div>
             </footer>
