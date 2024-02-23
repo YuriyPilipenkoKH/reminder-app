@@ -14,6 +14,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { deleteCollection } from "@/actions/collection"
 import { toast } from "./ui/use-toast"
 import { useRouter } from "next/navigation"
+import CreateTaskDialog from "./CreateTaskDialog"
 
 // console.log(Collection , Task)
 
@@ -25,6 +26,7 @@ interface Props {
 
 function CollectionCard({collection} :Props) {
     const [isOpen, setIsOpen] = useState(false)
+    const [showCreateModal, setShowCreateModal] = useState(false)
     const [isLoading, startTransition] = useTransition()
     const {tasks} = collection 
     const router = useRouter()
@@ -48,6 +50,12 @@ function CollectionCard({collection} :Props) {
     }
 
   return (
+    <>
+    <CreateTaskDialog 
+    open={showCreateModal}
+    setOpen={setShowCreateModal}
+    collection={collection}
+    />
     <Collapsible 
     open={isOpen}
     onOpenChange={setIsOpen}
@@ -89,7 +97,10 @@ function CollectionCard({collection} :Props) {
              {isLoading && <div>Deleting....</div>}
              {!isLoading && (
              <div>
-                <Button size={'icon'} variant={'ghost'}>
+                <Button 
+                size={'icon'}
+                 variant={'ghost'}
+                 onClick={() => setShowCreateModal(true)}>
                     <PlusIcon />
                 </Button>
                 <AlertDialog>
@@ -119,6 +130,7 @@ function CollectionCard({collection} :Props) {
             </footer>
         </CollapsibleContent>
     </Collapsible>
+    </>
   )
 }
 
