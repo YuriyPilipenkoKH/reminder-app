@@ -25,8 +25,6 @@ export default function RootLayout({
     <html lang="en" className={cn(inter.className, "dark")}
     style={{colorScheme: "dark"}}>
       <body >
-        
-          
         <ThemeProvider >
            <div className="flex min-h-screen w-full flex-col items-center dark:bg-black darkBackdrop">
             <NavBar/>

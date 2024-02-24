@@ -2,7 +2,7 @@
 
 import {  Collection, Task} from "@prisma/client"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
-import { useState, useTransition } from "react"
+import { useMemo, useState, useTransition } from "react"
 import { Button } from "./ui/button"
 import { cn } from "@/lib/utils"
 import { CollectionColor, CollectionColors } from "@/lib/constants"
@@ -31,6 +31,12 @@ function CollectionCard({collection} :Props) {
     const [isLoading, startTransition] = useTransition()
     const {tasks} = collection 
     const router = useRouter()
+
+    const totalTasks = collection.tasks.length
+    const tasksDone = useMemo(() => {
+        return collection.tasks.filter(task => task.done).length
+    }, [collection.tasks])
+    const progress = totalTasks === 0  ? 0 :  (tasksDone / totalTasks) * 100
 
     const removeCollection = async() => {
         try {
@@ -94,7 +100,7 @@ function CollectionCard({collection} :Props) {
                )
             : (
                 <>
-                <Progress className="rounded-none" value={44}/>
+                <Progress className="rounded-none" value={progress}/>
                 <div className="p-4 gap-3 flex flex-col">
                 { tasks.map((task) => (
                     <TaskCard 
