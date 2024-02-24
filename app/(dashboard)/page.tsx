@@ -30,8 +30,8 @@ async function WelcomeMsg() {
   }
   
   return (
-    <div className="flex w-full mb-12 ">
-      <h1 className="text-4xl font-bold mx-auto">
+    <div className="flex w-full mb-6 ">
+      <h1 className="text-3xl font-bold mx-auto">
       Welcome , <br />
       {user.firstName} {user.lastName}
       </h1>
@@ -42,8 +42,8 @@ async function WelcomeMsg() {
 
 function WelcomeMsgFallback() {
   return (
-    <div className="flex w-full mb-12">
-    <h1 className="text-4xl font-bold">
+    <div className="flex w-full mb-6">
+    <h1 className="text-3xl font-bold">
       <Skeleton className="w-[150px] h-[36px]" />
       <Skeleton className="w-[150px] h-[36px]" />
     </h1>

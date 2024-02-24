@@ -22,7 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en" className={cn(inter.className, "dark")}
+    <html 
+    lang="en" 
+    className={cn(inter.className, "dark")}
     style={{colorScheme: "dark"}}>
       <body >
         <ThemeProvider >
